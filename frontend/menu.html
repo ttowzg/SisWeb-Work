@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menu Principal - Sistema Médico</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="menu-header">
+        <h2>Olá, Nome do usuário</h2>
+      </div>
+
+      <p class="options-label">Opções:</p>
+
+      <div class="menu-options">
+        <button
+          class="menu-btn"
+          onclick="location.href='paciente-cadastro.html'"
+        >
+          Cadastrar paciente novo
+        </button>
+
+        <button class="menu-btn" onclick="location.href='#'">
+          Histórico de Pacientes
+        </button>
+        <button class="menu-btn" onclick="location.href='#'">
+          Análises de IA
+        </button>
+      </div>
+
+      <div class="logout-section">
+        <button class="btn-logout" onclick="location.href='login.html'">
+          Sair
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

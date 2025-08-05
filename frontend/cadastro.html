@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro - Sistema Médico</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <h1>Cadastro</h1>
+      <form action="#" method="POST">
+        <div class="form-group">
+          <label for="nome">Nome</label>
+          <input
+            type="text"
+            id="nome"
+            name="nome"
+            placeholder="Digite seu nome"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="contato@email.com"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <input
+            type="password"
+            id="senha"
+            name="senha"
+            placeholder="Crie uma senha"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="confirma-senha">Confirme sua senha</label>
+          <input
+            type="password"
+            id="confirma-senha"
+            name="confirma-senha"
+            placeholder="Digite novamente"
+            required
+          />
+        </div>
+        <button type="submit" class="btn-submit">Cadastre-se</button>
+      </form>
+
+      <div class="signup-section">
+        <span>Já possui uma conta?</span>
+        <button
+          type="button"
+          class="btn-signup"
+          onclick="location.href='login.html'"
+        >
+          Faça o login
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
