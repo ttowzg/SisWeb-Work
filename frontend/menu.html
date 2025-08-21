@@ -9,7 +9,7 @@
   <body>
     <div class="main-container">
       <div class="menu-header">
-        <h2>Olá, Nome do usuário</h2>
+        <h2 id="username-display">Olá, </h2>
       </div>
 
       <p class="options-label">Opções:</p>
@@ -22,11 +22,8 @@
           Cadastrar paciente novo
         </button>
 
-        <button class="menu-btn" onclick="location.href='#'">
+        <button class="menu-btn" onclick="location.href='historico.html'">
           Histórico de Pacientes
-        </button>
-        <button class="menu-btn" onclick="location.href='#'">
-          Análises de IA
         </button>
       </div>
 
@@ -36,5 +33,29 @@
         </button>
       </div>
     </div>
+    <script type="module">
+      import { auth, onAuthStateChanged } from './db.js';
+
+      document.addEventListener("DOMContentLoaded", function() {
+        const usernameDisplay = document.getElementById("username-display");
+
+        onAuthStateChanged(auth, (user) => {
+          if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/auth.user
+            const displayName = user.displayName;
+            if (displayName) {
+              usernameDisplay.textContent = `Olá, ${displayName}`;
+            } else {
+              usernameDisplay.textContent = `Olá, Usuário`; // Fallback if display name is not set
+            }
+          } else {
+            // User is signed out
+            usernameDisplay.textContent = `Olá, Visitante`; // Or redirect to login
+            // window.location.href = "login.html"; // Uncomment to redirect if not logged in
+          }
+        });
+      });
+    </script>
   </body>
 </html>

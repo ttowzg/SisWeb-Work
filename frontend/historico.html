@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Histórico de Pacientes - Sistema Médico</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="historico.css" />
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="menu-header">
+        <h2>Histórico de Pacientes</h2>
+      </div>
+
+      <div id="patient-list"></div>
+
+      <div class="logout-section">
+        <button class="btn-logout" onclick="location.href='menu.html'">
+          Voltar
+        </button>
+      </div>
+    </div>
+    <script type="module">
+      import { auth, onAuthStateChanged } from './db.js';
+
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          try {
+            const idToken = await user.getIdToken();
+            const response = await fetch('/patients', {
+              headers: {
+                'Authorization': `Bearer ${idToken}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const patients = await response.json();
+            const patientListDiv = document.getElementById('patient-list');
+
+            if (patients.length === 0) {
+              patientListDiv.innerHTML = '<p>Nenhum paciente cadastrado.</p>';
+              return;
+            }
+
+            const table = document.createElement('table');
+            table.innerHTML = `
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Data de Nascimento</th>
+                  <th>CPF</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${patients.map(patient => `
+                  <tr>
+                    <td>${patient.name}</td>
+                    <td>${patient.dob}</td>
+                    <td>${patient.cpf}</td>
+                    <td><button class="btn-details" data-id="${patient.id}">Ver Detalhes</button></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            `;
+
+            patientListDiv.appendChild(table);
+
+            // Add event listeners for the details buttons
+            document.querySelectorAll('.btn-details').forEach(button => {
+              button.addEventListener('click', function() {
+                const patientId = this.dataset.id;
+                window.location.href = `paciente-detalhes.html?id=${patientId}`;
+              });
+            });
+
+          } catch (error) {
+            console.error('Error fetching patients:', error);
+            alert('Erro ao buscar pacientes.');
+          }
+        } else {
+          // User is signed out
+          alert("Você não está logado. Faça o login para ver o histórico de pacientes.");
+          window.location.href = "login.html";
+        }
+      });
+    </script>
+  </body>
+</html>

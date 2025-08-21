@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalhes do Paciente - Sistema Médico</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="paciente-detalhes.css" />
+  </head>
+  <body>
+    <div class="main-container">
+      <div class="menu-header">
+        <h2 id="patient-name"></h2>
+      </div>
+
+      <div id="patient-details"></div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-primary" id="generate-report-btn">Gerar Relatório com IA</button>
+        <button type="button" class="btn-secondary" onclick="location.href='historico.html'">Voltar</button>
+      </div>
+
+      <div id="loading-indicator" style="display: none;">
+        <p>Gerando relatório, por favor aguarde...</p>
+        <div class="spinner"></div>
+      </div>
+
+      <div class="report-display" id="report-display" style="display: none;">
+        <h3>Relatório Gerado:</h3>
+        <div id="generated-report-content"></div>
+      </div>
+
+      <div class="historical-reports">
+        <h3>Relatórios Anteriores:</h3>
+        <div id="historical-reports-list"></div>
+      </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="module">
+      import { auth, onAuthStateChanged } from './db.js';
+
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const patientId = urlParams.get('id');
+
+            if (!patientId) {
+              throw new Error("Patient ID not found in URL.");
+            }
+
+            const idToken = await user.getIdToken();
+            const response = await fetch(`/patients/${patientId}`, {
+              headers: {
+                'Authorization': `Bearer ${idToken}`,
+              },
+            });
+
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const patient = await response.json();
+            console.log('Patient data:', patient);
+
+            document.getElementById('patient-name').textContent = patient.name;
+
+            const patientDetailsDiv = document.getElementById('patient-details');
+            patientDetailsDiv.innerHTML = `
+              <p><strong>Data de Nascimento:</strong> ${patient.dob}</p>
+              <p><strong>Gênero:</strong> ${patient.gender}</p>
+              <p><strong>CPF:</strong> ${patient.cpf}</p>
+              <p><strong>Telefone:</strong> ${patient.phone}</p>
+              <p><strong>Queixa Principal:</strong> ${patient.mainComplaint}</p>
+              <p><strong>História da Doença Atual:</strong> ${patient.hda}</p>
+              <p><strong>Doenças Crônicas:</strong> ${patient.chronicDiseases}</p>
+              <p><strong>Alergias:</strong> ${patient.allergies}</p>
+              <p><strong>Medicamentos em Uso:</strong> ${patient.medications}</p>
+            `;
+
+            // Fetch and display historical reports
+            const reportsResponse = await fetch(`/patients/${patientId}/reports`, {
+              headers: {
+                'Authorization': `Bearer ${idToken}`,
+              },
+            });
+
+            if (!reportsResponse.ok) {
+              throw new Error(`HTTP error! status: ${reportsResponse.status}`);
+            }
+
+            const historicalReports = await reportsResponse.json();
+            const historicalReportsListDiv = document.getElementById('historical-reports-list');
+
+            if (historicalReports.length > 0) {
+              historicalReports.forEach(report => {
+                const reportDiv = document.createElement('div');
+                reportDiv.classList.add('historical-report-item');
+                reportDiv.innerHTML = `
+                  <h4>Relatório Gerado em: ${new Date(report.createdAt).toLocaleString()}</h4>
+                  <div class="report-content">${marked.parse(report.reportContent)}</div>
+                  <hr>
+                `;
+                historicalReportsListDiv.appendChild(reportDiv);
+              });
+            } else {
+              historicalReportsListDiv.innerHTML = '<p>Nenhum relatório anterior encontrado.</p>';
+            }
+
+            document.getElementById('generate-report-btn').addEventListener('click', async function() {
+              const loadingIndicator = document.getElementById('loading-indicator');
+              loadingIndicator.style.display = 'block'; // Show loading indicator
+              try {
+                const idToken = await auth.currentUser.getIdToken();
+
+                console.log('Sending to /generate-report:', { patientData: patient });
+                const response = await fetch('/generate-report', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${idToken}`,
+                  },
+                  body: JSON.stringify({ patientData: patient }),
+                });
+
+                if (!response.ok) {
+                  throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                // Convert Markdown to HTML and display
+                document.getElementById('generated-report-content').innerHTML = marked.parse(data.report);
+                document.getElementById('report-display').style.display = 'block';
+
+                // After generating a new report, refresh the historical reports list
+                // For simplicity, we'll just reload the page or re-fetch reports
+                // A more sophisticated approach would be to prepend the new report to the list
+                location.reload(); // Reloads the page to show the new report in historical list
+
+              } catch (error) {
+                console.error('Error generating report:', error);
+                document.getElementById('generated-report-content').textContent = 'Erro ao gerar relatório.';
+                document.getElementById('report-display').style.display = 'block';
+              } finally {
+                loadingIndicator.style.display = 'none'; // Hide loading indicator
+              }
+            });
+
+          } catch (error) {
+            console.error('Error fetching patient details:', error);
+            alert('Erro ao buscar detalhes do paciente.');
+          }
+        } else {
+          // User is signed out
+          alert("Você não está logado. Faça o login para ver os detalhes do paciente.");
+          window.location.href = "login.html";
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -8,7 +8,7 @@
   </head>
   <body>
     <div class="main-container anamnese-container">
-      <form action="#" method="POST">
+      <form id="patient-form" method="POST">
         <div class="menu-header">
           <h2>Cadastro de Paciente (Anamnese)</h2>
         </div>
@@ -95,9 +95,55 @@
 
         <div class="form-actions">
           <button type="submit" class="btn-primary">Ok</button>
-          <button type="button" class="btn-secondary">Gerar Relatório</button>
+          <button type="button" class="btn-secondary" onclick="location.href='menu.html'">Voltar</button>
         </div>
       </form>
     </div>
+    <script type="module">
+      import { auth } from './db.js';
+
+      document.getElementById("patient-form").addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+        const patientData = {};
+
+        // Map form data to patientData object
+        patientData.name = formData.get('nome');
+        patientData.dob = formData.get('data-nasc');
+        patientData.gender = formData.get('genero');
+        patientData.cpf = formData.get('cpf');
+        patientData.phone = formData.get('telefone');
+        patientData.mainComplaint = formData.get('queixa');
+        patientData.hda = formData.get('hda');
+        patientData.chronicDiseases = formData.get('doencas');
+        patientData.allergies = formData.get('alergias');
+        patientData.medications = formData.get('medicamentos');
+
+        try {
+          const idToken = await auth.currentUser.getIdToken();
+
+          const response = await fetch('/patients', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${idToken}`,
+            },
+            body: JSON.stringify(patientData),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          alert('Paciente cadastrado com sucesso!');
+          form.reset();
+        } catch (error) {
+          console.error('Error adding patient:', error);
+          alert('Erro ao cadastrar paciente.');
+        }
+      });
+    </script>
   </body>
 </html>

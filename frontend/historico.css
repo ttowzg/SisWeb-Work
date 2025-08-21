@@ -1,0 +1,40 @@
+/* --- Tabela de Histórico --- */
+#patient-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#patient-list th, #patient-list td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+#patient-list th {
+    background-color: #f2f2f2;
+    font-weight: 600;
+}
+
+#patient-list tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#patient-list tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* --- Botão de Detalhes --- */
+.btn-details {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-details:hover {
+    background-color: #0056b3;
+}

@@ -1,0 +1,9 @@
+# Dependencies
+node_modules/
+
+# Firebase service account key
+*.json
+
+.env
+
+.server_output.log

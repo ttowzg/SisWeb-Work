@@ -9,7 +9,7 @@
   <body>
     <div class="login-container">
       <h1>Login</h1>
-      <form action="#" method="POST">
+      <form action="#" method="POST" id="login-form">
         <div class="form-group">
           <label for="email">E-mail</label>
           <input
@@ -43,5 +43,33 @@
         </button>
       </div>
     </div>
+    <script type="module">
+      import { auth, signInWithEmailAndPassword } from "./db.js";
+
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("senha").value;
+
+          try {
+            const userCredential = await signInWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+            const user = userCredential.user;
+            const idToken = await user.getIdToken();
+
+            localStorage.setItem("idToken", idToken);
+            localStorage.setItem("username", user.email.split("@")[0]);
+            window.location.href = "menu.html";
+          } catch (error) {
+            console.error("Error during login:", error);
+            alert("Invalid credentials");
+          }
+        });
+    </script>
   </body>
 </html>
