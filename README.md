@@ -27,7 +27,7 @@ com possível diagnóstico/problema que essa pessoa tem.
 <!-- Apresentar restrições de funcionalidades e de escopo. -->
 ### 3. Restrições
 
-  Neste trabalho não serão considerados - Ainda em produção.
+  Neste trabalho não serão coletados muitos dados para análise de cada paciente, sendo considerados os principais para análise, devido a natureza acadêmica deste.
 
 <!-- Construir alguns protótipos para a aplicação, disponibilizá-los no Github e descrever o que foi considerado. //-->
 ### 4. Protótipo
@@ -36,4 +36,5 @@ com possível diagnóstico/problema que essa pessoa tem.
 
 ### 5. Referências
 
-  Não possui ainda.
+  Analise de requisitos usados para basear o projeto foi feita a partir de um formulário que enviei para todos amigos da área da saúde, dentre eles, alunos e ex alunos da UFV, UEMG, etc. Formulário fechado.
+
