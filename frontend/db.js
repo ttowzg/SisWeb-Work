@@ -8,7 +8,7 @@ import {
   onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-// Your web app's Firebase configuration
+
 const firebaseConfig = {
   apiKey: "AIzaSyAjVCWtHAs_j1GOREAHUA2UMi0sN6Kbi-8",
   authDomain: "sisweb-diagsis.firebaseapp.com",
