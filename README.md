@@ -15,8 +15,7 @@
 
   O trabalho final tem como tema o desenvolvimento de um 'Sistema web para apoio à diagnóstico', mais especificamente um 
 sistema que receberia o cadastro de um paciente e então geraria um 
-relatório que será lido por uma IA e geraria um gráfico estatístico 
-com possível diagnóstico/problema que essa pessoa tem.
+relatório que será lido por uma IA relatando um possível diagnóstico/problema que essa pessoa tem.
 
 
 <!-- Descrever e limitar o escopo da aplicação. -->
@@ -37,4 +36,5 @@ com possível diagnóstico/problema que essa pessoa tem.
 ### 5. Referências
 
   Analise de requisitos usados para basear o projeto foi feita a partir de um formulário que enviei para todos amigos da área da saúde, dentre eles, alunos e ex alunos da UFV, UEMG, etc. Formulário fechado.
+
 
