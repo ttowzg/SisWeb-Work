@@ -10,13 +10,7 @@ import {
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAjVCWtHAs_j1GOREAHUA2UMi0sN6Kbi-8",
-  authDomain: "sisweb-diagsis.firebaseapp.com",
-  projectId: "sisweb-diagsis",
-  storageBucket: "sisweb-diagsis.appspot.com",
-  messagingSenderId: "818890249613",
-  appId: "1:818890249613:web:d53b71877612961d4119c4",
-  measurementId: "G-93LHT92M8E",
+  //tirado por motivos de não quero problemas...
 };
 
 // Initialize Firebase
